@@ -36,7 +36,7 @@ router.post('/createuser', async (req, res) => {
 
     newuser.save();
 
-    res.send(newuser);
+    res.json({"status":true,"msg":"Account Created Sucessfully,Now you can login"});
 })
 
 router.post('/authenticate_user', async (req, res) => {
