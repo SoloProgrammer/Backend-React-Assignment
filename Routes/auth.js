@@ -22,11 +22,11 @@ router.post('/createuser', async (req, res) => {
 
     //if user alredy exists withh the same email entered by the user so it return with json of status:false and an error msg......
 
-    if(user){return res.status(500).json({"status":false,"msg":"Plz use Unique Email,The user with this Email already Sign-up"})}
+    if(user){return res.status(400).json({"status":false,"msg":"Plz use Unique Email,The user with this Email already Sign-up"})}
 
     // password length shiuld minimum 5 characters long to preceed for the sign-up........
 
-    if (password.length < 5) { return res.status(500).json({"status":false,"msg":"Password must contains at least 5 characters"}) }
+    if (password.length < 5) { return res.status(400).json({"status":false,"msg":"Password must contains at least 5 characters"}) }
 
     const salt = await bcrypt.genSalt()
 
@@ -46,13 +46,13 @@ router.post('/authenticate_user', async (req, res) => {
 
         let user = await User.findOne({ email })
 
-        if (!user) { return res.status(500).json({ "status": false, "msg": "Invalid credentials" }) }
+        if (!user) { return res.status(400).json({ "status": false, "msg": "Invalid credentials" }) }
 
         const pass = user.password
 
         const passwordCompare = await bcrypt.compare(password, pass)
 
-        if (!passwordCompare) { return res.status(500).json({ "status": false, "msg": "Invalid credentials" }) }
+        if (!passwordCompare) { return res.status(400).json({ "status": false, "msg": "Invalid credentials" }) }
 
         const payload = {          //// Data which is to be store while creating authtoken in that authtoken
             user: {
@@ -64,7 +64,7 @@ router.post('/authenticate_user', async (req, res) => {
         res.json({ "status": true, "msg": "Authentication success","token":authToken })
 
     } catch (error) {
-        res.status(500).send(error.message)
+        res.status(400).send(error.message)
     }
 })
 
@@ -77,7 +77,7 @@ router.get('/getuser',fetchuser,async (req,res)=>{
         res.json(user)
         
     } catch (error) {
-        res.status(500).send(error.message)
+        res.status(400).send(error.message)
     }
 })
 
